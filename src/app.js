@@ -10,10 +10,6 @@ const jsonParser = bodyParser.json();
 const logger = require('../config/winston.js');
 
 const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
-// const find_ride = (db, id, error) => {
-//   if (error) {
-//   }
-// }
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 const notFoundResponse = () => {
@@ -111,16 +107,7 @@ module.exports = (db) => {
 
   app.get('/rides', (req, res) => {
     db.all('SELECT * FROM Rides', (err, rows) => {
-      var response;
-      if (err) {
-        response = serverErrorResponse();
-      } else if (rows.length === 0) {
-        response = notFoundResponse();
-      } else {
-        response = rows;
-      }
-
-      return res.send(response);
+      return res.send(readResponse(err, rows));
     });
   });
 
