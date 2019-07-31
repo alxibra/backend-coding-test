@@ -12,12 +12,10 @@ const logger = require('../config/winston.js');
 const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
-const notFoundResponse = () => {
-  return { error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' }
-};
+const notFoundResponse = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
 
 const readResponse = (error, rows) => {
-  var response;
+  let response;
   if (error) {
     response = serverErrorResponse();
   } else if (rows.length === 0) {
@@ -27,7 +25,17 @@ const readResponse = (error, rows) => {
   }
 
   return response;
-}
+};
+
+const invalidStartResponse = () => ({
+  error_code: 'VALIDATION_ERROR',
+  message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
+});
+
+const invalidEndResponse = () => ({
+  error_code: 'VALIDATION_ERROR',
+  message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
+});
 
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
@@ -42,19 +50,11 @@ module.exports = (db) => {
     const driverVehicle = req.body.driver_vehicle;
 
     if (isValidStart(startLatitude, startLongitude)) {
-      const response = {
-        error_code: 'VALIDATION_ERROR',
-        message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
-      };
-      logger.info(response);
-      return res.send(response);
+      return res.send(invalidStartResponse());
     }
 
     if (endLatitude < -90 || endLatitude > 90 || endLongitude < -180 || endLongitude > 180) {
-      return res.send({
-        error_code: 'VALIDATION_ERROR',
-        message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
-      });
+      return res.send(invalidEndResponse());
     }
 
     if (typeof riderName !== 'string' || riderName.length < 1) {
@@ -106,15 +106,11 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', (err, rows) => {
-      return res.send(readResponse(err, rows));
-    });
+    db.all('SELECT * FROM Rides', (err, rows) => res.send(readResponse(err, rows)));
   });
 
   app.get('/rides/:id', (req, res) => {
-    db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
-      return res.send(readResponse(err, rows));
-    });
+    db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => res.send(readResponse(err, rows)));
   });
 
   return app;
