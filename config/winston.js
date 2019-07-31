@@ -19,7 +19,7 @@ var options = {
   },
 };
 
-var logger = new winston.Logger({
+var logger = new winston.createLogger({
   transports: [
     new winston.transports.File(options.file),
     new winston.transports.Console(options.console)
