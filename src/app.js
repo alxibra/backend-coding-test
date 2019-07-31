@@ -66,30 +66,38 @@ const mapRequestBody = (req) => (
   }
 )
 
+const validationResponse = (body) => {
+  if (isValidStart(body.startLatitude, body.startLongitude)) {
+    return { valid: false, response: invalidStartResponse() };
+  }
+
+  if (isValidEnd(body.endLatitude, body.endLongitude)) {
+    return { valid: false, response: invalidEndResponse() };
+  }
+
+  if (isValidName(body.riderName)) {
+    return { valid: false , response: invalidRiderNameResponse() };
+  }
+
+  if (isValidName(body.driverName)) {
+    return { valid: false, response: invalidDriverNameResponse() };
+  }
+
+  if (isValidName(body.driverVehicle)) {
+    return { valid: false, response: invalidDriverVehicleResponse() };
+  }
+
+  return { valid: true }
+}
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
   app.post('/rides', jsonParser, (req, res) => {
     const body = mapRequestBody(req);
 
-    if (isValidStart(body.startLatitude, body.startLongitude)) {
-      return res.send(invalidStartResponse());
-    }
-
-    if (isValidEnd(body.endLatitude, body.endLongitude)) {
-      return res.send(invalidEndResponse());
-    }
-
-    if (isValidName(body.riderName)) {
-      return res.send(invalidRiderNameResponse());
-    }
-
-    if (isValidName(body.driverName)) {
-      return res.send(invalidDriverNameResponse());
-    }
-
-    if (isValidName(body.driverVehicle)) {
-      return res.send(invalidDriverVehicleResponse());
+    if (!validationResponse(body).valid) {
+      return res.send(validationResponse(body).response);
     }
 
     const values = [
