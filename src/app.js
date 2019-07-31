@@ -49,6 +49,11 @@ const invalidDriverNameResponse = () => ({
   message: 'Driver name must be a non empty string',
 });
 
+const invalidDriverVehicleResponse = () => ({
+  error_code: 'VALIDATION_ERROR',
+  message: 'Driver Vehicle must be a non empty string',
+});
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
@@ -77,11 +82,8 @@ module.exports = (db) => {
       return res.send(invalidDriverNameResponse());
     }
 
-    if (typeof driverVehicle !== 'string' || driverVehicle.length < 1) {
-      return res.send({
-        error_code: 'VALIDATION_ERROR',
-        message: 'Driver Vehicle must be a non empty string',
-      });
+    if (isValidName(driverVehicle)) {
+      return res.send(invalidDriverVehicleResponse());
     }
 
     const values = [
