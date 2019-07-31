@@ -93,13 +93,13 @@ module.exports = (db) => {
     }
 
     const values = [
-      req.body.start_lat,
-      req.body.start_long,
-      req.body.end_lat,
-      req.body.end_long,
-      req.body.rider_name,
-      req.body.driver_name,
-      req.body.driver_vehicle,
+      body.startLatitude,
+      body.startLongitude,
+      body.endLatitude,
+      body.endLongitude,
+      body.riderName,
+      body.driverName,
+      body.driverVehicle,
     ];
 
     db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {
