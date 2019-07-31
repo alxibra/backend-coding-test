@@ -15,7 +15,7 @@ const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 
 //   }
 // }
 
-const server_error_reponse = () => { return { error_code: "SERVER_ERROR", message: "Unknown error_code" } } ;
+const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
@@ -78,12 +78,12 @@ module.exports = (db) => {
 
     db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {
       if (err) {
-        return res.send(server_error_reponse());
+        return res.send(serverErrorResponse());
       }
 
       db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
         if (error) {
-          return res.send(server_error_reponse());
+          return res.send(serverErrorResponse());
         }
 
         return res.send(rows);
@@ -96,7 +96,7 @@ module.exports = (db) => {
   app.get('/rides', (req, res) => {
     db.all('SELECT * FROM Rides', (err, rows) => {
       if (err) {
-        return res.send(server_error_reponse());
+        return res.send(serverErrorResponse());
       }
 
       if (rows.length === 0) {
@@ -113,7 +113,7 @@ module.exports = (db) => {
   app.get('/rides/:id', (req, res) => {
     db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
       if (err) {
-        return res.send(server_error_reponse());
+        return res.send(serverErrorResponse());
       }
 
       if (rows.length === 0) {
