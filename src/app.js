@@ -11,6 +11,7 @@ const logger = require('../config/winston.js');
 
 const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
 const isValidEnd = (lat, lon) => (lat < -90 || lat > 90 || lon < -180 || lon > 180);
+const isValidName = (name) => (typeof name !== 'string' || name.length < 1);
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 const notFoundResponse = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
@@ -58,7 +59,7 @@ module.exports = (db) => {
       return res.send(invalidEndResponse());
     }
 
-    if (typeof riderName !== 'string' || riderName.length < 1) {
+    if (isValidName(riderName)) {
       return res.send({
         error_code: 'VALIDATION_ERROR',
         message: 'Rider name must be a non empty string',
