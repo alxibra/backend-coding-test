@@ -9,6 +9,10 @@ const jsonParser = bodyParser.json();
 
 const logger = require('../config/winston.js');
 
+const isValidStart = function (lat, lon) {
+  return lat < -90 || lat > 90 || lon < -180 || lon > 180;
+};
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
@@ -21,7 +25,7 @@ module.exports = (db) => {
     const driverName = req.body.driver_name;
     const driverVehicle = req.body.driver_vehicle;
 
-    if is_valid_start(startLatitude, startLongitude) {
+    if (isValidStart(startLatitude, startLongitude)) {
       const response = {
         error_code: 'VALIDATION_ERROR',
         message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
@@ -68,7 +72,7 @@ module.exports = (db) => {
         });
       }
 
-      db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (err, rows) => {
+      db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
         if (err) {
           return res.send({
             error_code: 'SERVER_ERROR',
