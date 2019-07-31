@@ -89,6 +89,7 @@ module.exports = (db) => {
         return res.send(rows);
       });
     });
+    return null;
   });
 
   app.get('/rides', (req, res) => {
