@@ -11,7 +11,7 @@ const logger = require('../config/winston.js');
 
 const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
 const isValidEnd = (lat, lon) => (lat < -90 || lat > 90 || lon < -180 || lon > 180);
-const isValidName = (name) => (typeof name !== 'string' || name.length < 1);
+const isValidName = name => (typeof name !== 'string' || name.length < 1);
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 const notFoundResponse = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
@@ -39,6 +39,11 @@ const invalidEndResponse = () => ({
   message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
 });
 
+const invalidRiderNameResponse = () => ({
+  error_code: 'VALIDATION_ERROR',
+  message: 'Rider name must be a non empty string',
+});
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
@@ -60,10 +65,7 @@ module.exports = (db) => {
     }
 
     if (isValidName(riderName)) {
-      return res.send({
-        error_code: 'VALIDATION_ERROR',
-        message: 'Rider name must be a non empty string',
-      });
+      return res.send(invalidRiderNameResponse());
     }
 
     if (typeof driverName !== 'string' || driverName.length < 1) {
