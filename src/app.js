@@ -10,6 +10,7 @@ const jsonParser = bodyParser.json();
 const logger = require('../config/winston.js');
 
 const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
+const isValidEnd = (lat, lon) => (lat < -90 || lat > 90 || lon < -180 || lon > 180);
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 const notFoundResponse = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
@@ -53,7 +54,7 @@ module.exports = (db) => {
       return res.send(invalidStartResponse());
     }
 
-    if (endLatitude < -90 || endLatitude > 90 || endLongitude < -180 || endLongitude > 180) {
+    if (isValidEnd(endLatitude, endLongitude)) {
       return res.send(invalidEndResponse());
     }
 
