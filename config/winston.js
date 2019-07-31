@@ -26,3 +26,10 @@ var logger = new winston.Logger({
   ],
   exitOnError: false, // do not exit on handled exceptions
 });
+
+logger.stream = {
+  write: function(message, encoding) {
+    logger.info(message);
+  },
+};
+module.exports = logger;
