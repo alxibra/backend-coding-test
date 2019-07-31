@@ -90,6 +90,21 @@ const validationResponse = (body) => {
   return { valid: true }
 }
 
+const create = (values, db, res) => {
+    db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {
+      if (err) {
+        return res.send(serverErrorResponse());
+      }
+
+      db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
+        if (error) {
+          return res.send(serverErrorResponse());
+        }
+        return res.send(rows);
+      });
+    });
+}
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
@@ -109,22 +124,7 @@ module.exports = (db) => {
       body.driverName,
       body.driverVehicle,
     ];
-
-    db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {
-      if (err) {
-        return res.send(serverErrorResponse());
-      }
-
-      db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
-        if (error) {
-          return res.send(serverErrorResponse());
-        }
-
-        return res.send(rows);
-      });
-      return null;
-    });
-    return null;
+    return create(values, db, res)
   });
 
   app.get('/rides', (req, res) => {
