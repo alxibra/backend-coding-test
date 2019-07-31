@@ -9,9 +9,7 @@ const jsonParser = bodyParser.json();
 
 const logger = require('../config/winston.js');
 
-const isValidStart = function (lat, lon) {
-  return lat < -90 || lat > 90 || lon < -180 || lon > 180;
-};
+const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 180;
 
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
