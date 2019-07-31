@@ -54,35 +54,41 @@ const invalidDriverVehicleResponse = () => ({
   message: 'Driver Vehicle must be a non empty string',
 });
 
+const mapRequestBody = (req) => (
+  {
+    startLatitude: Number(req.body.start_lat),
+    startLongitude: Number(req.body.start_long),
+    endLatitude: Number(req.body.end_lat),
+    endLongitude: Number(req.body.end_long),
+    riderName: req.body.rider_name,
+    driverName: req.body.driver_name,
+    driverVehicle: req.body.driver_vehicle
+  }
+)
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
   app.post('/rides', jsonParser, (req, res) => {
-    const startLatitude = Number(req.body.start_lat);
-    const startLongitude = Number(req.body.start_long);
-    const endLatitude = Number(req.body.end_lat);
-    const endLongitude = Number(req.body.end_long);
-    const riderName = req.body.rider_name;
-    const driverName = req.body.driver_name;
-    const driverVehicle = req.body.driver_vehicle;
+    const body = mapRequestBody(req);
 
-    if (isValidStart(startLatitude, startLongitude)) {
+    if (isValidStart(body.startLatitude, body.startLongitude)) {
       return res.send(invalidStartResponse());
     }
 
-    if (isValidEnd(endLatitude, endLongitude)) {
+    if (isValidEnd(body.endLatitude, body.endLongitude)) {
       return res.send(invalidEndResponse());
     }
 
-    if (isValidName(riderName)) {
+    if (isValidName(body.riderName)) {
       return res.send(invalidRiderNameResponse());
     }
 
-    if (isValidName(driverName)) {
+    if (isValidName(body.driverName)) {
       return res.send(invalidDriverNameResponse());
     }
 
-    if (isValidName(driverVehicle)) {
+    if (isValidName(body.driverVehicle)) {
       return res.send(invalidDriverVehicleResponse());
     }
 
