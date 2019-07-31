@@ -109,7 +109,7 @@ module.exports = (db) => {
         });
       }
 
-      res.send(rows);
+      return res.send(rows);
     });
   });
 
