@@ -88,6 +88,7 @@ module.exports = (db) => {
 
         return res.send(rows);
       });
+      return null;
     });
     return null;
   });
