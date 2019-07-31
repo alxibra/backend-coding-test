@@ -16,6 +16,22 @@ const isValidStart = (lat, lon) => lat < -90 || lat > 90 || lon < -180 || lon > 
 // }
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
+const notFoundResponse = () => {
+  return { error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' }
+};
+
+const readResponse = (error, rows) => {
+  var response;
+  if (error) {
+    response = serverErrorResponse();
+  } else if (rows.length === 0) {
+    response = notFoundResponse();
+  } else {
+    response = rows;
+  }
+
+  return response;
+}
 
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
@@ -95,35 +111,22 @@ module.exports = (db) => {
 
   app.get('/rides', (req, res) => {
     db.all('SELECT * FROM Rides', (err, rows) => {
+      var response;
       if (err) {
-        return res.send(serverErrorResponse());
+        response = serverErrorResponse();
+      } else if (rows.length === 0) {
+        response = notFoundResponse();
+      } else {
+        response = rows;
       }
 
-      if (rows.length === 0) {
-        return res.send({
-          error_code: 'RIDES_NOT_FOUND_ERROR',
-          message: 'Could not find any rides',
-        });
-      }
-
-      return res.send(rows);
+      return res.send(response);
     });
   });
 
   app.get('/rides/:id', (req, res) => {
     db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
-      if (err) {
-        return res.send(serverErrorResponse());
-      }
-
-      if (rows.length === 0) {
-        return res.send({
-          error_code: 'RIDES_NOT_FOUND_ERROR',
-          message: 'Could not find any rides',
-        });
-      }
-
-      return res.send(rows);
+      return res.send(readResponse(err, rows));
     });
   });
 
