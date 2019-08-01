@@ -1,7 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const ride = require('./ride.js');
 const app = express();
-const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const logger = require('../config/winston.js');
 
