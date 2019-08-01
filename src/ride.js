@@ -1,11 +1,11 @@
-const pageParams = require('./page_params.js')
+const mapper = require('./ride/mapper.js')
 
 const show = (req, res, db) => {
-    db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => res.send(readResponse(err, rows)));
+  mapper.show(req, res, db)
 }
 
 const index = (req, res, db) => {
-    db.all('SELECT * FROM Rides LIMIT ?, ?', pageParams(req), (err, rows) => res.send(readResponse(err, rows)));
+  mapper.index(req, res, db);
 }
 
 const readResponse = (error, rows) => {
@@ -108,17 +108,7 @@ const create = (req, res, db) => {
   if (!validationResponse(body).valid) {
     return res.send(validationResponse(body).response);
   }
-
-  const values = [
-    body.startLatitude,
-    body.startLongitude,
-    body.endLatitude,
-    body.endLongitude,
-    body.riderName,
-    body.driverName,
-    body.driverVehicle,
-  ];
-  return db_create(values, db, res);
+  return mapper.create(req, res, db);
 }
 module.exports = {
   show: show,
