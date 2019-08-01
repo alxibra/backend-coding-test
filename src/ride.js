@@ -88,20 +88,6 @@ const validationResponse = (body) => {
   return { valid: true };
 };
 
-const db_create = (values, db, res) => {
-  db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {
-    if (err) {
-      return res.send(serverErrorResponse());
-    }
-
-    db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
-      if (error) {
-        return res.send(serverErrorResponse());
-      }
-      return res.send(rows);
-    });
-  });
-};
 const create = (req, res, db) => {
   const body = mapRequestBody(req);
 
