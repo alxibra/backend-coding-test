@@ -15,10 +15,7 @@ const isValidName = name => (typeof name !== 'string' || name.length < 1);
 
 const serverErrorResponse = () => ({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
 const notFoundResponse = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
-const pageParams = (req) => {
-  console.log(req.query);
-  return null
-}
+const pageParams = require('./page_params.js')
 
 const readResponse = (error, rows) => {
   let response;
