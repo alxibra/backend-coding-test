@@ -226,4 +226,24 @@ describe('API tests', () => {
                 .end(expected_response);
         });
     });
+    describe('get /rides/:id', () => {
+        var values = [ 90, 180, 90, 180, "alex", "alex", "test"]
+        db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values, function (err) {} );
+        it('should return created content', (done) => {
+            var expected_response = function(err, res) {
+              if (err) {
+               return done(err);
+              }
+              const content = res.body;
+              console.log(content);
+              // expect(content.length).to.be.equal(1);
+              return done();
+            }
+            request(app)
+                .get('/rides/1')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(expected_response);
+        });
+    });
 });
