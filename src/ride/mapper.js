@@ -28,6 +28,15 @@ const values = req => (
   ]
 );
 
+const privateShow = (id, db, res) => {
+  db.all('SELECT * FROM Rides WHERE rideID = ?', id, (error, rows) => {
+    if (error) {
+      return res.send(serverErrorResponse());
+    }
+    return res.send(rows);
+  });
+};
+
 const index = (req, res, db) => {
   db.all('SELECT * FROM Rides LIMIT ?, ?', pageParams(req), (err, rows) => res.send(readResponse(err, rows)));
 };
@@ -41,16 +50,10 @@ const create = (req, res, db) => {
     if (err) {
       return res.send(serverErrorResponse());
     }
-
-    db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
-      if (error) {
-        return res.send(serverErrorResponse());
-      }
-      return res.send(rows);
-    });
-    return res.send();
+    return privateShow(this.lastID, db, res);
   });
 };
+
 module.exports = {
   index,
   show,
