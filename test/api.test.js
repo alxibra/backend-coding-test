@@ -179,4 +179,32 @@ describe('API tests', () => {
                 .end(expected_response);
         });
     });
+    describe('POST /rides with rider vehicle', () => {
+        it('should return created content', (done) => {
+            var body = {
+                  start_lat: 90,
+                  start_long: 180,
+                  end_lat: 90,
+                  end_long: 180,
+                  rider_name: "alex",
+                  driver_name: "alex",
+                  driver_vehicle: ""
+              }
+            var expected_response = function(err, res) {
+              if (err) {
+               return done(err);
+              }
+              const content = res.body
+              expect(content.error_code).to.be.equal('VALIDATION_ERROR');
+              expect(content.message).to.be.equal("Driver Vehicle must be a non empty string");
+              return done();
+            }
+            request(app)
+                .post('/rides')
+                .send(body)
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(expected_response);
+        });
+    });
 });
