@@ -265,4 +265,23 @@ describe('API tests', () => {
                 .end(expected_response);
         });
     });
+    describe('get /rides/:id not found', () => {
+        it('should return created content', (done) => {
+            var expected_response = function(err, res) {
+              if (err) {
+               return done(err);
+              }
+              const content = res.body;
+              expect(content.error_code).to.be.equal('RIDES_NOT_FOUND_ERROR');
+              expect(content.message).to.be.equal('Could not find any rides');
+              return done();
+            }
+            db.run('delete from rides', (err) => {});
+            request(app)
+                .get('/rides/:id')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(expected_response);
+        });
+    });
 });
