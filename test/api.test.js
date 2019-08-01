@@ -40,11 +40,25 @@ describe('API tests', () => {
                   driver_name: "alex",
                   driver_vehicle: "test"
               }
+            var expected_response = function(err, res) {
+              if (err) {
+               return done(err);
+              }
+              expect(res.text).to.be.equal('hey');
+              return done();
+            }
             request(app)
                 .post('/rides')
                 .send(body)
                 .set('Accept', 'application/json')
-                .expect(200, done);
+                .expect(200)
+                .end((err, res) => {
+                  if (err) {
+                    return done(err);
+                  }
+                  expect(res.text).to.be.equal('hey');
+                  return done();
+               });
         });
     });
 });
