@@ -65,10 +65,8 @@ const validationResponse = (body) => {
 const validate = (req) => {
   const body = mapRequestBody(req);
   return validationResponse(body);
-}
+};
 
 module.exports = {
-  validate: validate
-}
-
-
+  validate,
+};
