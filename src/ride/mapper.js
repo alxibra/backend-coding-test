@@ -37,7 +37,7 @@ const show = (req, res, db) => {
 };
 
 const create = (req, res, db) => {
-  db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values(req), (err) => {
+  db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values(req), function (err) {
     if (err) {
       return res.send(serverErrorResponse());
     }
@@ -48,7 +48,7 @@ const create = (req, res, db) => {
       }
       return res.send(rows);
     });
-    return res.send({ code: 'unprocessed_entity' });
+    return res.send();
   });
 };
 module.exports = {
