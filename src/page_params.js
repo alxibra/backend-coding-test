@@ -1,6 +1,6 @@
 module.exports = (req) => {
-  return {
-    page: Number(req.query.page),
-    limit: Number(req.query.limit)
-  }
+  return [
+    Number(req.query.page),
+    Number(req.query.limit)
+  ]
 }

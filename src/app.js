@@ -129,8 +129,7 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
-    pageParams(req);
-    db.all('SELECT * FROM Rides', (err, rows) => res.send(readResponse(err, rows)));
+    db.all('SELECT * FROM Rides LIMIT ?, ?', pageParams(req), (err, rows) => res.send(readResponse(err, rows)));
   });
 
   app.get('/rides/:id', (req, res) => {
