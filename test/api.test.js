@@ -7,6 +7,9 @@ const db = new sqlite3.Database(':memory:');
 
 const app = require('../src/app')(db);
 const buildSchemas = require('../src/schemas');
+let chai = require('chai');
+
+var expect = chai.expect;
 
 describe('API tests', () => {
     before((done) => {
@@ -44,7 +47,15 @@ describe('API tests', () => {
               if (err) {
                return done(err);
               }
-              expect(res.text).to.be.equal('hey');
+              const content = res.body[0]
+              expect(content.rideID).to.be.equal(1);
+              expect(content.startLat).to.be.equal(90);
+              expect(content.startLong).to.be.equal(180);
+              expect(content.endLat).to.be.equal(80);
+              expect(content.endLong).to.be.equal(180);
+              expect(content.riderName).to.be.equal('alex');
+              expect(content.driverName).to.be.equal('alex');
+              expect(content.driverVehicle).to.be.equal('test');
               return done();
             }
             request(app)
@@ -52,13 +63,7 @@ describe('API tests', () => {
                 .send(body)
                 .set('Accept', 'application/json')
                 .expect(200)
-                .end((err, res) => {
-                  if (err) {
-                    return done(err);
-                  }
-                  expect(res.text).to.be.equal('hey');
-                  return done();
-               });
+                .end(expected_response);
         });
     });
 });
