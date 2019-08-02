@@ -3,7 +3,7 @@ const notFound = () => ({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could n
 const read = (error, rows) => {
   let response;
   if (error) {
-    response = serverErrorResponse();
+    response = serverError();
   } else if (rows.length === 0) {
     response = notFound();
   } else {
