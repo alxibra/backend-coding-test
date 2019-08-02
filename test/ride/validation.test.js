@@ -65,4 +65,27 @@ describe('ride validation', function() {
       expect(validation.validate(req).response).to.eql(response);
     });
   })
+  describe('when rider name is not valid', function(){
+    var req = {
+      body: {
+        start_lat: 90,
+        start_lon: 180,
+        end_lat: 90,
+        end_long: 180,
+        rider_name: '',
+        driver_name: 'alex',
+        driver_vehicle: 'test'
+      }
+    }
+    var response ={
+      error_code: 'VALIDATION_ERROR',
+      message: 'Rider name must be a non empty string',
+    };
+    it('must not valid', function(){
+      expect(validation.validate(req).valid).to.eql(false);
+    });
+    it('must have message', function(){
+      expect(validation.validate(req).response).to.eql(response);
+    });
+  })
 });
