@@ -21,11 +21,19 @@ describe('ride response', function(){
         expect(response.read(error, rows)).to.eql({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
       });
     });
-    describe('when row length is 0', function(){
+    describe('when error present', function(){
       var rows = [];
       var error = true;
       it('return correct response', function(){
         expect(response.read(error, rows)).to.eql({ error_code: 'SERVER_ERROR', message: 'Unknown error_code' });
+      });
+    });
+
+    describe('when row is present', function(){
+      var rows = [1];
+      var error = false;
+      it('return correct response', function(){
+        expect(response.read(error, rows)).to.eql([1]);
       });
     });
   })
