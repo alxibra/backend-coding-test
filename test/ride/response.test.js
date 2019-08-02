@@ -13,5 +13,14 @@ describe('ride response', function(){
       expect(response.notFound()).to.eql({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
     });
   })
+  describe('read', function(){
+    describe('when row length is 0', function(){
+      var rows = [];
+      var error = false;
+      it('return correct response', function(){
+        expect(response.read(error, rows)).to.eql({ error_code: 'RIDES_NOT_FOUND_ERROR', message: 'Could not find any rides' });
+    });
+    });
+  })
 });
 
