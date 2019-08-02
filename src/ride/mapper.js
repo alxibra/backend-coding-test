@@ -23,20 +23,34 @@ const privateShow = (id, db, res) => {
 };
 
 const index = (req, res, db) => {
-  db.all('SELECT * FROM Rides LIMIT ?, ?', pageParams(req), (err, rows) => res.send(response.read(err, rows)));
+  db.all(
+    'SELECT * FROM Rides LIMIT ?, ?',
+    pageParams(req),
+    (err, rows) => res.send(response.read(err, rows)),
+  );
 };
 
 const show = (req, res, db) => {
-  db.all('SELECT * FROM Rides WHERE rideID= ?', [req.params.id], (err, rows) => res.send(response.read(err, rows)));
+  db.all(
+    'SELECT * FROM Rides WHERE rideID= ?',
+    [req.params.id],
+    (err, rows) => res.send(response.read(err, rows)),
+  );
 };
 
 const create = (req, res, db) => {
-  db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values(req), function (err) {
-    if (err) {
-      return res.send(response.serverError());
-    }
-    return privateShow(this.lastID, db, res);
-  });
+  db.run(
+    'INSERT INTO Rides' +
+      '(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle)' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?)',
+    values(req),
+    function (err) {
+      if (err) {
+        return res.send(response.serverError());
+      }
+      return privateShow(this.lastID, db, res);
+    },
+  );
 };
 
 module.exports = {
