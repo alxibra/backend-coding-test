@@ -3,7 +3,6 @@
 const pageParams = require('../src/page_params')
 let chai = require('chai');
 var expect = chai.expect;
-var assert = require('assert');
 
 describe('pageParams', function() {
   describe('when page and limit are not availabe', function() {
