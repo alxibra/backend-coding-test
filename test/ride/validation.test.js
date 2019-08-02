@@ -54,8 +54,15 @@ describe('ride validation', function() {
         driver_vehicle: 'test'
       }
     }
+    var response = {
+      error_code: 'VALIDATION_ERROR',
+      message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
+    };
     it('must not valid', function(){
       expect(validation.validate(req).valid).to.eql(false);
+    });
+    it('must have message', function(){
+      expect(validation.validate(req).response).to.eql(response);
     });
   })
 });
