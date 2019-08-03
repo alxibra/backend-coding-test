@@ -15,12 +15,11 @@ const values = req => (
 );
 
 const privateShow = (id, db, res) => {
-  db.all(sql.show(), id, (error, rows) => {
-    if (error) {
-      return res.send(response.serverError());
-    }
-    return res.send(rows);
-  });
+  db.all(
+    sql.show(),
+    id,
+    (err, rows) => res.send(response.read(err, rows)),
+  );
 };
 
 const index = (req, res, db) => {
@@ -32,11 +31,7 @@ const index = (req, res, db) => {
 };
 
 const show = (req, res, db) => {
-  db.all(
-    sql.show(),
-    [req.params.id],
-    (err, rows) => res.send(response.read(err, rows)),
-  );
+  privateShow(req.params.id, db, res);
 };
 
 const create = (req, res, db) => {
