@@ -19,5 +19,33 @@ describe('ride params', function(){
       expect(params.create(req)).to.eql([ 90, 180, 90, 180, 'alex', 'alex', 'test' ]);
     })
   });
+  describe('index', function() {
+    describe('when page and limit are not availabe', function() {
+      it('return [0, 1]', function() {
+        var req = { query: {}  }
+        expect(params.index(req)).to.eql([0, 1]);
+      });
+    });
+    describe('when limit are not availabe', function() {
+      it('return [0, 1]', function() {
+        var req = { query: {page: 1}  }
+        expect(params.index(req)).to.eql([1, 1]);
+      });
+    });
+
+    describe('when page are not availabe', function() {
+      it('return [0, 1]', function() {
+        var req = { query: {limit: 2}  }
+        expect(params.index(req)).to.eql([0, 2]);
+      });
+    });
+
+    describe('when page and limit are availabe', function() {
+      it('return [0, 1]', function() {
+        var req = { query: {limit: 2, page: 2}  }
+        expect(params.index(req)).to.eql([4, 2]);
+      });
+    });
+  });
 })
 
