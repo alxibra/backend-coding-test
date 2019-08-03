@@ -10,7 +10,8 @@
     "test": "mocha --reporter dot $(find ./test/ -name '*.test.js')",
     "coverage": "nyc --reporter html --reporter text npm test",
     "start": "node index.js",
-    "test:load": "artillery run config/artillery.yml"
+    "test:load": "forever start -c \"npm run load:test\" ./",
+    "load:test": "bin/load_test.sh"
   },
   "keywords": [
     "Xendit"
