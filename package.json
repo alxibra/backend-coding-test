@@ -9,7 +9,8 @@
   "scripts": {
     "test": "mocha --reporter dot $(find ./test/ -name '*.test.js')",
     "coverage": "nyc --reporter html --reporter text npm test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test:load": "artillery quick --count 1 -n 20 https://artillery.io/"
   },
   "keywords": [
     "Xendit"
