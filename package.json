@@ -10,7 +10,8 @@
     "test": "mocha --reporter dot $(find ./test/ -name '*.test.js')",
     "coverage": "nyc --reporter html --reporter text npm test",
     "start": "node index.js",
-    "test:load": "artillery run config/artillery.yml"
+    "test:load": "forever start -c \"npm run load:test\" ./",
+    "load:test": "bin/load_test.sh"
   },
   "keywords": [
     "Xendit"
@@ -19,9 +20,11 @@
   "license": "ISC",
   "dependencies": {
     "app-root-path": "^2.2.1",
+    "artillery": "^1.6.0-28",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "express": "^4.16.4",
+    "forever": "^1.0.0",
     "sqlite3": "^4.0.6",
     "winston": "^3.2.1"
   },
