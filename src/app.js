@@ -6,7 +6,13 @@ const app = express();
 const jsonParser = bodyParser.json();
 const logger = require('../config/winston.js');
 const log = (req) => {
-  logger.info({ path: req.path, method: req.method, query: req.query, params: req.params, body: req.body })
+  logger.info(
+    { path: req.path,
+      method: req.method,
+      query: req.query,
+      params: req.params,
+      body: req.body
+    })
 }
 
 module.exports = (db) => {
