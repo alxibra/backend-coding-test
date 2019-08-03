@@ -7,7 +7,9 @@ const jsonParser = bodyParser.json();
 const logger = require('../config/winston.js');
 
 module.exports = (db) => {
-  app.get('/health', asyncMiddleware(async (req, res, next) => res.send('Healthy')));
+  app.get('/health', asyncMiddleware(async (req, res, next) => {
+    res.send('Healthy')
+  }));
 
   app.post('/rides', jsonParser, asyncMiddleware(async(req, res, next) => {
     ride.create(req, res, db);
