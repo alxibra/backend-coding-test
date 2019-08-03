@@ -1,18 +1,7 @@
 const pageParams = require('../page_params.js');
+const params = require('./params.js');
 const response = require('./response.js');
 const sql = require('./sql'); 
-
-const values = req => (
-  [
-    Number(req.body.start_lat),
-    Number(req.body.start_long),
-    Number(req.body.end_lat),
-    Number(req.body.end_long),
-    req.body.rider_name,
-    req.body.driver_name,
-    req.body.driver_vehicle,
-  ]
-);
 
 const privateShow = (id, db, res) => {
   db.all(
@@ -25,7 +14,7 @@ const privateShow = (id, db, res) => {
 const index = (req, res, db) => {
   db.all(
     sql.index(),
-    pageParams(req),
+    params.index(req),
     (err, rows) => res.send(response.read(err, rows)),
   );
 };
@@ -37,7 +26,7 @@ const show = (req, res, db) => {
 const create = (req, res, db) => {
   db.run(
     sql.create(),
-    values(req),
+    params.create(req),
     function (err) {
       if (err) {
         return res.send(response.serverError());
