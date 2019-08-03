@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --reporter dot",
+    "test": "mocha --reporter dot $(find ./test/ -name '*.test.js')",
     "coverage": "nyc --reporter html --reporter text npm test",
     "start": "node index.js"
   },
