@@ -1,5 +1,6 @@
 'use strict';
 
+const helmet = require('helmet');
 const express = require('express');
 const app = express();
 const port = 8010;
@@ -11,6 +12,7 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
 const buildSchemas = require('./src/schemas');
+app.use(helmet());
 
 db.serialize(() => {
     buildSchemas(db);
