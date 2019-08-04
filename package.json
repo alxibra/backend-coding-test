@@ -37,5 +37,9 @@
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
-  }
+  },
+  "repository": {
+      "type": "git",
+      "url": "git@github.com:alxibra/backend-coding-test.git"
+    }
 }
