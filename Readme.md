@@ -1,8 +1,12 @@
 [![CircleCI](https://circleci.com/gh/alxibra/backend-coding-test/tree/master.svg?style=svg)](https://circleci.com/gh/alxibra/backend-coding-test/tree/master)
+
 # Xendit Coding Exercise
 
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
 
+## Documentation
+We record all [api documentation](https://documenter.getpostman.com/view/1514891/SVYqNe95?version=latest) in  postman, we need to do is sync our ride
+collection from app to postman server.
 ## Setup
 
 1. Fork this repository to your own github profile
